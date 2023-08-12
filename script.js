@@ -6,6 +6,7 @@ let divide = (x, y) => x / y
 let firstNum = ""
 let secondNum = ""
 let operator = ""
+let solution = ""
 const buttons = document.querySelectorAll('button')
 const display = document.querySelector('.output')
 
@@ -35,9 +36,10 @@ buttons.forEach((button) => {
       firstNum += button.innerHTML
       display.innerHTML = displayValue(firstNum, secondNum, operator)
     
-    // store operator
-    } else if ( button.innerHTML == "/" || button.innerHTML == "x" || 
-                button.innerHTML == "+" || button.innerHTML == "-") {
+    // store operator if there is no solution stored
+    } else if ( (button.innerHTML == "/" || button.innerHTML == "x" || 
+                button.innerHTML == "+" || button.innerHTML == "-") &&
+                solution == "" && secondNum == "") {
       operator = button.innerHTML
       display.innerHTML = displayValue(firstNum, secondNum, operator)
 
@@ -48,9 +50,30 @@ buttons.forEach((button) => {
 
     // evalutate equation
     } else if (button.innerHTML == "=") {
-      let solution = operate(firstNum, secondNum, operator)
+      if (secondNum == "") {
+        return
+      } 
+      solution = operate(firstNum, secondNum, operator)
       solution = Number(solution.toFixed(2))
       display.innerHTML = displayValue(firstNum, secondNum, operator) + ` = ${solution}`
+    
+
+    // evaluate string equation
+    } else if ( (button.innerHTML == "/" || button.innerHTML == "x" || 
+                button.innerHTML == "+" || button.innerHTML == "-") &&
+                solution == "" && secondNum != "") {
+      firstNum = operate(firstNum, secondNum, operator)
+      secondNum = ""
+      operator = button.innerHTML
+      display.innerHTML = displayValue(firstNum, secondNum, operator)
+    
+
+    // clear display 
+    } else if (button.innerHTML == "C") {
+      firstNum = ""
+      secondNum = ""
+      operator = ""
+      display.innerHTML = displayValue(firstNum, secondNum, operator)
     }
   })
 })
