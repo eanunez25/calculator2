@@ -20,7 +20,11 @@ function operate(x, y, operation) {
   } else if (operation == "x") {
     return multiply(x, y)
   } else {
-    return divide(x, y)
+    if (y == 0) {
+      display.innerHTML = "ERROR"
+    } else {
+      return divide(x, y)
+    }
   }
 }
 
@@ -57,23 +61,32 @@ buttons.forEach((button) => {
       solution = Number(solution.toFixed(2))
       display.innerHTML = displayValue(firstNum, secondNum, operator) + ` = ${solution}`
     
-
     // evaluate string equation
     } else if ( (button.innerHTML == "/" || button.innerHTML == "x" || 
                 button.innerHTML == "+" || button.innerHTML == "-") &&
-                solution == "" && secondNum != "") {
+                solution == "" && secondNum !== "") {
       firstNum = operate(firstNum, secondNum, operator)
       secondNum = ""
       operator = button.innerHTML
       display.innerHTML = displayValue(firstNum, secondNum, operator)
     
-
     // clear display 
     } else if (button.innerHTML == "C") {
       firstNum = ""
       secondNum = ""
       operator = ""
+      solution = ""
       display.innerHTML = displayValue(firstNum, secondNum, operator)
+
+    // string equation after = is pressed
+    } else if ( (button.innerHTML == "/" || button.innerHTML == "x" || 
+                button.innerHTML == "+" || button.innerHTML == "-") &&
+                solution !== "" && secondNum !== "") {
+      firstNum = solution
+      secondNum = ""
+      operator = button.innerHTML
+      solution = ""
+      display.innerHTML = displayValue(firstNum, secondNum, operator)         
     }
   })
 })
